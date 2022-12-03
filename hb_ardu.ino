@@ -1,11 +1,11 @@
 #include <Wire.h>
 //This codde is obtained from Pulsesensor.com
-int PulseSensorPurplePin = 0;        // Pulse Sensor PURPLE WIRE connected to ANALOG PIN 0
+int PulseSensorPurplePin = A0;        // Pulse Sensor PURPLE WIRE connected to ANALOG PIN 0
 int LED13 = 13;   //  The on-board Arduion LED
 
 
 int Signal;                // holds the incoming raw data. Signal value can range from 0-1024
-int Threshold = 550;            // Determine which Signal to "count as a beat", and which to ingore.
+int Threshold = 200;            // Determine which Signal to "count as a beat", and which to ingore.
 
 
 char string_temp[32];
@@ -15,8 +15,9 @@ unsigned long prev_micros = 0;
 void setup() {
     Serial.begin(9600);
     // Begin I2c
-    pinMode(LED13,OUTPUT);
-    //Wire.begin();
+    //pINMODE WAS OUTPUT
+    pinMode(LED13,INPUT);
+    Wire.begin();
     
 
 }
@@ -48,5 +49,8 @@ void loop() {
 
     delay(10);
 }
+
+
+
 
 
