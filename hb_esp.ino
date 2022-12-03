@@ -49,8 +49,8 @@ WiFiClient client;
 //const char * myWriteAPIKey = "";
 //const long CHANNEL = ;
 //const char *WRITE_API = "";
-#define API_WRITE "F26FJA7SP55NVMTF"
-#define CHANNEL_ID 1908356
+#define API_WRITE "9LATEMHGSQLRWJVV"
+#define CHANNEL_ID 1968842
 //int status = 0;
 //int field[8] = {1,2,3,4,5,6,7,8};
 /**
