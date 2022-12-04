@@ -43,9 +43,9 @@ float estimated_altitude = 0;
 
 #include "esp_wpa2.h"
 //for the sake of security this part should be filled by user
-#define EAP_IDENTITY "of31227"
-#define EAP_USERNAME "of31227"
-#define EAP_PASSWORD "5Co1Y2*s7kr8?3"
+#define EAP_IDENTITY ""
+#define EAP_USERNAME ""
+#define EAP_PASSWORD ""
 #define MAX_DISCONNECTS 4
 const char* ssid = "PAWS-Secure";
 unsigned char disconnectNum = 0;
