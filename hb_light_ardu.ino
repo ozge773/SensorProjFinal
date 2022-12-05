@@ -3,7 +3,7 @@
 
 
 //Heart beat sensor
-int PulseSensorPurplePin = A0;        // Pulse Sensor PURPLE WIRE connected to ANALOG PIN 0
+int PulseSensorPurplePin = A0;       // Pulse Sensor PURPLE WIRE connected to ANALOG PIN 0
 int LED13 = 13;   //  The on-board Arduion LED
 //light sensor
 int light_sensor = A1;
@@ -29,8 +29,8 @@ void setup() {
 void loop() {
 
     //----------------------for the heartbeat sensor --------------------------------------------------
-    int Signal = analogRead(PulseSensorPurplePin);
-    //Serial.println(Signal);   
+    float Signal = analogRead(PulseSensorPurplePin);
+    Serial.println(Signal);   
     dtostrf(Signal,6,4,string_temp);
     sprintf(write_buffer, "%c %s",'H',string_temp);
 
@@ -39,33 +39,42 @@ void loop() {
     } else {
      digitalWrite(LED13,LOW);                //  Else, the sigal must be below "550", so "turn-off" this LED.
     }
-    dtostrf(0,6,4,string_temp);
+    dtostrf(Signal,6,4,string_temp);
+    sprintf(write_buffer, "%s %s",write_buffer,string_temp);
+    dtostrf(Signal,6,4,string_temp);
+    sprintf(write_buffer, "%s %s",write_buffer,string_temp);
+    /*dtostrf(0,6,4,string_temp);
     sprintf(write_buffer, "%s %s",write_buffer,string_temp);
     dtostrf(0,6,4,string_temp);
     sprintf(write_buffer, "%s %s",write_buffer,string_temp);
+
+    */
+    Wire.beginTransmission(0x1A);
+    Wire.write(write_buffer);
+    Wire.endTransmission(true);
     //---------------------------------------------------------------------------------------------------------
     //--------------------------------------light sensor-------------------------------------------------------
 
 
       
-      int val;
-      int light = analogRead(light_sensor);
-      const int light_ambient =0;
-      const int dark_ambient = 2000;
-      Serial.println(light);
-      val = map(light, light_ambient, dark_ambient, -50, 100);
+    //float val;
+    float light = analogRead(light_sensor);
+    float light_ambient =0;//const int
+    float dark_ambient = 2000;
+    //Serial.println(light);
+    //val = map(light, light_ambient, dark_ambient, 0, 600);//(-50, 100)before
 
-      dtostrf(val ,6, 4, string_temp);
-      sprintf(write_buffer, "%c %s", 'L', string_temp);
+    dtostrf(light ,6, 4, string_temp);
+    sprintf(write_buffer, "%c %s", 'L', string_temp);
 
-      dtostrf(0,6,4,string_temp);
-      sprintf(write_buffer, "%s %s",write_buffer,string_temp);
-      dtostrf(0,6,4,string_temp);
-      sprintf(write_buffer, "%s %s",write_buffer,string_temp);
+    dtostrf(0,6,4,string_temp);
+    sprintf(write_buffer, "%s %s",write_buffer,string_temp);
+    dtostrf(0,6,4,string_temp);
+    sprintf(write_buffer, "%s %s",write_buffer,string_temp);
       
 
     
-    
+    //send 
 
     Wire.beginTransmission(0x1A);
     Wire.write(write_buffer);
