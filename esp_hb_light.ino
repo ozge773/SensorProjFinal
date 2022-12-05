@@ -58,8 +58,7 @@ WiFiClient client;
 //const char *WRITE_API = "";
 #define API_WRITE "9LATEMHGSQLRWJVV"
 #define CHANNEL_ID 1968842
-//int status = 0;
-//int field[8] = {1,2,3,4,5,6,7,8};
+
 /**
  * @brief Executes when a WiFi connection event occurs.
  * 
@@ -170,17 +169,22 @@ bool parseMessage(char message[], int len) {
   }
   switch (message[0]){
     case ('H'):
-      hb.hb =strtof(end_ptr, NULL);
+      hb.hb =strtof(msg, NULL);//msg null
       return true;
     case ('L'):
-      luce.intensity = (end_ptr, NULL);
+      //luce.intensity=strtof(msg, NULL);
+      luce.intensity=strtof(msg, &end_ptr);
       return true;
+    default:
+      return false;
 
   }//switch 
 
 }//bool
 
-
+int prev_millis1;
+int prev_millis2;
+  
 
 void setup() {
   // Begins Serial
@@ -190,35 +194,57 @@ void setup() {
   // Sets I2C message reception behavior
   Wire.onReceive(onReceive);
   // Begins I2C
-  Wire.setPins(5,4);
+  Wire.setPins(3,2);
   Wire.begin(uint8_t(0x1A));
   // Initialize prev_millis
-  prev_millis = millis();
+  prev_millis1 = millis();
+  prev_millis2 = millis();
   
-  Serial.begin(9600);      
+  //Serial.begin(9600);      
 }
 
-
+int count_hb=0;
 void thingspeak()
 {
-    ThingSpeak.setField(1,float (hb.hb)); //heart beat
+    //
+    //float val;
+    //val = map(light, light_ambient, dark_ambient, -50, 100);
+    /*if (millis()- prev_millis1 >60000){
+        ThingSpeak.setField(1, count_hb); //heart beat
+        prev_millis1 = millis();
+    } */
+
+
+    ThingSpeak.setField(1, float(hb.hb)); //heart beat
     ThingSpeak.setField(2,float (luce.intensity)); //heart beat
 
 
 
     ThingSpeak.writeFields(CHANNEL_ID, API_WRITE); 
 
-    delay(10);//it was 1500
+    //delay(10);//it was 1500
 }
 
 void loop() {
   // Sets Accel, Gyro, Magno and BMP280 structs once per loop from most recent data.
   updateSensors();
-  
+  //Serial.println(hb.hb);
+  Serial.println(luce.intensity);
+
+
+  if (hb.hb>500){
+    count_hb = count_hb +1;
+
+  }
+
+
 
   // Print sensor outputs as a comma seperated list
-
-  thingspeak();
+  if (millis()- prev_millis2 >1000){
+       thingspeak();
+       prev_millis2 = millis();
+  }
+ 
 
   delay(10);
 }
